@@ -82,9 +82,10 @@ class jDate
 
     /**
      * @param string $str
+     * @param DateTimeZone|string|null $timezone
      * @return bool|string
      */
-    public function format($str)
+    public function format($str, $timezone = null)
     {
         // convert alias string
         if (in_array($str, array_keys($this->formats))) {
@@ -93,7 +94,7 @@ class jDate
 
         // if valid unix timestamp...
         if ($this->time !== false) {
-            return jDateTime::strftime($str, $this->time);
+            return jDateTime::strftime($str, $this->time, $timezone);
         } else {
             return false;
         }

@@ -296,14 +296,45 @@ class jDateTime
     }
 
     /**
+     * Creates a DateTimeZone from a string or a DateTimeZone
+     *
+     * @param DateTimeZone|string|null $object
+     *
+     * @throws InvalidArgumentException
+     *
+     * @return DateTimeZone
+     */
+    protected static function safeCreateDateTimeZone($object)
+    {
+        if ($object === null) {
+            // Don't return null... avoid Bug #52063 in PHP <5.3.6
+            return new \DateTimeZone(date_default_timezone_get());
+        }
+
+        if ($object instanceof \DateTimeZone) {
+            return $object;
+        }
+
+        $tz = @timezone_open((string) $object);
+
+        if ($tz === false) {
+            throw new \InvalidArgumentException('Unknown or bad timezone ('.$object.')');
+        }
+
+        return $tz;
+    }
+
+    /**
      * @param $format
      * @param bool $stamp
+     * @param DateTimeZone|string|null $timezone
      * @return mixed
      */
-    public static function date($format, $stamp = false)
+    public static function date($format, $stamp = false, $timezone = null)
     {
         $stamp = ($stamp !== false) ? $stamp : time();
-        $dateTime = new \DateTime('@' . $stamp);
+        $timezone = is_null($timezone) ? config('app.timezone') : $timezone;
+        $dateTime = new \DateTime('@' . $stamp, static::safeCreateDateTimeZone($timezone));
 
 
         //Find what to replace
@@ -459,9 +490,10 @@ class jDateTime
     /**
      * @param $format
      * @param bool $stamp
+     * @param DateTimeZone|string|null $timezone
      * @return mixed
      */
-    public static function strftime($format, $stamp = false)
+    public static function strftime($format, $stamp = false, $timezone = null)
     {
         $str_format_code = array(
             "%a",
@@ -553,7 +585,7 @@ class jDateTime
         $format = str_replace($str_format_code, $date_format_code, $format);
 
         //Convert to date
-        return self::date($format, $stamp);
+        return self::date($format, $stamp, $timezone);
     }
 
     private static function getDayNames($day, $shorten = false, $len = 1, $numeric = false)
