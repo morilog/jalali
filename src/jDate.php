@@ -82,7 +82,7 @@ class jDate
 
     /**
      * @param string $str
-     * @param DateTimeZone $timezone
+     * @param DateTimeZone|string|null $timezone
      * @return bool|string
      */
     public function format($str, $timezone = null)
