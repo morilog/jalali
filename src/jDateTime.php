@@ -311,7 +311,7 @@ class jDateTime
             return new \DateTimeZone(date_default_timezone_get());
         }
 
-        if ($object instanceof DateTimeZone) {
+        if ($object instanceof \DateTimeZone) {
             return $object;
         }
 
