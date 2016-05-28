@@ -765,11 +765,13 @@ class jDateTime
     /**
      * @param $format
      * @param $str
+     * @param DateTimeZone|string|null $tz
      * @return Carbon
      */
-    public static function createCarbonFromFormat($format, $str)
+    public static function createCarbonFromFormat($format, $str, $tz = null)
     {
-        return Carbon::createFromTimestamp(self::createDatetimeFromFormat($format, $str)->getTimestamp());
+        if(is_null($tz)) $tz = config('app.timezone');
+        return Carbon::createFromTimestamp(self::createDatetimeFromFormat($format, $str)->getTimestamp(), $tz);
     }
 
     /**
