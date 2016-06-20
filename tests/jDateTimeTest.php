@@ -36,6 +36,12 @@ class jDateTimeTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(jDateTime::strftime('Y-m-d', strtotime('2016-05-8')) === '1395-02-19');
         $this->assertTrue(jDateTime::convertNumbers(jDateTime::strftime('Y-m-d', strtotime('2016-05-8'))) === '۱۳۹۵-۰۲-۱۹');
         $this->assertFalse(jDateTime::strftime('Y-m-d', strtotime('2016-05-8')) === '۱۳۹۵-۰۲-۱۹');
+        
+        $this->assertTrue(date_default_timezone_set('Asia/Tehran'));
+        $this->assertTrue(jDateTime::strftime('Y-m-d', strtotime('2016-05-8')) === '1395-02-19');
+        $this->assertTrue(jDateTime::strftime('Y-m-d', (new \DateTime('2016-05-8', new \DateTimeZone("UTC")))->getTimestamp()) === '1395-02-19');
+        
+        $this->assertTrue(date_default_timezone_set('UTC'));
     }
 
     public function test_parseFromPersian()
