@@ -27,7 +27,7 @@ use Carbon\Carbon;
 class jDate
 {
     /**
-     * @var \DateTime
+     * @var Carbon
      */
     protected $dateTime;
 
@@ -61,7 +61,7 @@ class jDate
     }
 
     /**
-     * @return \DateTime|static
+     * @return Carbon
      */
     public function getDateTime()
     {
