@@ -52,6 +52,62 @@ class jDate
     }
 
     /**
+     * Create a new jDate instance from a specific Jalali date and time.
+     *
+     * If any of $year, $month or $day are set to null, their now() values will
+     * be used.
+     *
+     * If any of $hour, $minute or $second are set to null, 0 will be used.
+     *
+     * If no params are passed, now() values will be returned.
+     *
+     * @param null $year
+     * @param null $month
+     * @param null $day
+     * @param null $hour
+     * @param null $minute
+     * @param null $second
+     * @param null $tz
+     * @return jDate
+     */
+    public static function create($year = null, $month = null, $day = null, $hour = null, $minute = null, $second = null, $tz = null)
+    {
+        $now = new jDate(null, $tz);
+
+        if ($year === null) {
+            return $now;
+        }
+
+        $defaults = array_combine(array(
+            'year',
+            'month',
+            'day',
+        ), explode('-', $now->format('Y-n-j')));
+
+        $year = $year === null ? $defaults['year'] : $year;
+        $month = $month === null ? $defaults['month'] : $month;
+        $day = $day === null ? $defaults['day'] : $day;
+        $hour = $hour === null ? 0 : $hour;
+        $minute = $minute === null ? 0 : $minute;
+        $second = $second === null ? 0 : $second;
+
+        static::fixWraps($year, $month, $day, $hour, $minute, $second);
+
+        $gregorian = jDateTime::toGregorian($year, $month, $day);
+
+        $year = str_pad($gregorian[0], 4, "0", STR_PAD_LEFT);
+        $month = str_pad($gregorian[1], 2, "0", STR_PAD_LEFT);
+        $day = str_pad($gregorian[2], 2, "0", STR_PAD_LEFT);
+        $hour = str_pad($hour, 2, "0", STR_PAD_LEFT);
+        $minute = str_pad($minute, 2, "0", STR_PAD_LEFT);
+        $second = str_pad($second, 2, "0", STR_PAD_LEFT);
+
+        $dateString = "{$year}-{$month}-{$day} {$hour}:{$minute}:{$second}";
+
+        return static::forge($dateString, $tz);
+    }
+
+    /**
      * @param string|null $str
      * @param null $timezone
      */
