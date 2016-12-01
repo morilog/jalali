@@ -54,10 +54,11 @@ class jDate
     /**
      * Create a new jDate instance from a specific Jalali date and time.
      *
-     * If any of $year, $month or $day are set to null, their now() values will
+     * If any of $year, $month or $day are set to null their now() values will
      * be used.
      *
-     * If any of $hour, $minute or $second are set to null, 0 will be used.
+     * If $hour is null it will be set to its now() value and the default
+     * values for $minute and $second will be their now() values.
      *
      * If no params are passed, now() values will be returned.
      *
@@ -74,22 +75,27 @@ class jDate
     {
         $now = new jDate(null, $tz);
 
-        if ($year === null) {
-            return $now;
-        }
-
         $defaults = array_combine(array(
             'year',
             'month',
             'day',
-        ), explode('-', $now->format('Y-n-j')));
+            'hour',
+            'minute',
+            'second',
+        ), explode('-', $now->format('Y-n-j-G-i-s')));
 
         $year = $year === null ? $defaults['year'] : $year;
         $month = $month === null ? $defaults['month'] : $month;
         $day = $day === null ? $defaults['day'] : $day;
-        $hour = $hour === null ? 0 : $hour;
-        $minute = $minute === null ? 0 : $minute;
-        $second = $second === null ? 0 : $second;
+
+        if ($hour === null) {
+            $hour = $defaults['hour'];
+            $minute = $minute === null ? $defaults['minute'] : $minute;
+            $second = $second === null ? $defaults['second'] : $second;
+        } else {
+            $minute = $minute === null ? 0 : $minute;
+            $second = $second === null ? 0 : $second;
+        }
 
         static::fixWraps($year, $month, $day, $hour, $minute, $second);
 

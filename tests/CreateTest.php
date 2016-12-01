@@ -9,7 +9,7 @@ class CreateTest extends PHPUnit_Framework_TestCase
         $jDate1 = jdate('2015-06-03');
         $jDate2 = jDate::create(1394, 3, 13);
 
-        $this->assertSame($jDate1->format('Y-m-d H:i'), $jDate2->format('Y-m-d H:i'));
+        $this->assertSame($jDate1->format('Y-m-d'), $jDate2->format('Y-m-d'));
     }
 
     public function testCreateNow()
