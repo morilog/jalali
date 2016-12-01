@@ -214,4 +214,123 @@ class jDate
         return $this->dateTime->getTimestamp();
     }
 
+    /**
+     * Normalizes the given DateTime values and removes wraps.
+     *
+     * @param null $year
+     * @param null $month
+     * @param null $day
+     * @param null $hour
+     * @param null $minute
+     * @param null $second
+     */
+    protected static function fixWraps(&$year = null, &$month = null, &$day = null, &$hour = null, &$minute = null, &$second = null)
+    {
+        if ($year < 0) {
+            // Cannot handle dates less than 0.
+            // converting negative years to Gregorian cause error
+            $year = 0;
+            static::fixWraps($year, $month, $day, $hour, $minute, $second);
+        } elseif ($year > 1876) {
+            // Cannot handle dates grater than 1876
+            $year = 1876;
+            static::fixWraps($year, $month, $day, $hour, $minute, $second);
+        }
+
+        // Month
+        if ($month === null) {
+            return;
+        }
+        if ($month <= 0) {
+            $year = $year + (int)($month / 12) - 1;
+            $month = 12 + $month % 12;
+            static::fixWraps($year, $month, $day, $hour, $minute, $second);
+        } elseif ($month > 12) {
+            $year = $year + (int)($month / 12);
+            $month = $month % 12;
+            static::fixWraps($year, $month, $day, $hour, $minute, $second);
+        }
+
+        // Day
+        if ($day === null) {
+            return;
+        }
+        if ($day > ($daysInMonth = jDateTime::jalaliMonthLength($year, $month))) {
+            $day = $day - $daysInMonth;
+            $month++;
+            static::fixWraps($year, $month, $day, $hour, $minute, $second);
+
+        } elseif ($day == 0) {
+            $day = static::daysInPreviousMonth($year, $month);
+            $month--;
+            static::fixWraps($year, $month, $day, $hour, $minute, $second);
+
+        } elseif ($day < 0) {
+            $pmDays = static::daysInPreviousMonth($year, $month);
+
+            if ($day > -$pmDays) {
+                $month--;
+                $day = $pmDays + $day;
+                static::fixWraps($year, $month, $day, $hour, $minute, $second);
+
+            } elseif ($day <= -$pmDays) {
+                $month--;
+                $day = $day + $pmDays;
+                static::fixWraps($year, $month, $day, $hour, $minute, $second);
+            }
+        }
+
+        // Hour
+        if ($hour === null) {
+            return;
+        }
+        if ($hour >= 24) {
+            $day = $day + (int)($hour / 24);
+            $hour = ($hour % 24);
+            static::fixWraps($year, $month, $day, $hour, $minute, $second);
+
+        } elseif ($hour < 0) {
+            $day = $day + (int)($hour / 24) - 1;
+            $hour = 24 + ($hour % 24);
+            static::fixWraps($year, $month, $day, $hour, $minute, $second);
+        }
+        
+        // Minute
+        if ($minute === null) {
+            return;
+        }
+        if ($minute >= 60) {
+            $hour = $hour + (int)($minute / 60);
+            $minute = ($minute % 60);
+            static::fixWraps($year, $month, $day, $hour, $minute, $second);
+
+        } elseif ($minute < 0) {
+            $hour = $hour + (int)($minute / 60) - 1;
+            $minute = 60 + ($minute % 60);
+            static::fixWraps($year, $month, $day, $hour, $minute, $second);
+        }
+
+        // Seconds
+        if ($second === null) {
+            return;
+        }
+        if ($second >= 60) {
+            $minute = $minute + (int)($second / 60);
+            $second = ($second % 60);
+            static::fixWraps($year, $month, $day, $hour, $minute, $second);
+
+        } elseif ($second < 0) {
+            $minute = $minute + (int)($second / 60) - 1;
+            $second = 60 + ($second % 60);
+            static::fixWraps($year, $month, $day, $hour, $minute, $second);
+        }
+    }
+
+    private static function daysInPreviousMonth($year, $month)
+    {
+        if ($month == 1) {
+            return jDateTime::jalaliMonthLength($year - 1, 12);
+        }
+        return jDateTime::jalaliMonthLength($year, $month - 1);
+    }
 }
