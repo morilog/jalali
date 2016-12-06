@@ -31,6 +31,20 @@ class jDate
      */
     protected $dateTime;
 
+    protected static $months = array(
+        'farvardin' => 1,
+        'ordibehesht' => 2,
+        'khordad' => 3,
+        'tir' => 4,
+        'mordad' => 5,
+        'shahrivar' => 6,
+        'mehr' => 7,
+        'aban' => 8,
+        'azar' => 9,
+        'dey' => 10,
+        'bahman' => 11,
+        'esfand' => 12,
+    );
 
     /**
      * @var array
@@ -215,6 +229,139 @@ class jDate
     }
 
     /**
+     * @param string $str
+     * @return static|boolean
+     */
+    public function modify($str)
+    {
+        $d = static::getDateArray($this);
+        $modifyIsDone = false;
+        $str = trim(strtolower($str));
+
+        switch (true) {
+            // Relative Day/Week/Weekday to a relative/absolute date
+            case (preg_match('((the )?(first|last) (day|week|week ?day) of (.+))', $str, $matches)):
+                $d = static::getDateArray($this->modify($matches[4]));
+                switch ($matches[3]) {
+                    case 'day':
+                        $d['day'] = $matches[2] == 'first' ? 1 : jDateTime::jalaliMonthLength($d['year'], $d['month']);
+                        break;
+                    case 'week day':
+                    case 'weekday':
+                        $d['day'] = $matches[2] == 'first' ? 1 : jDateTime::jalaliMonthLength($d['year'], $d['month']);
+                        $step = $matches[2] == 'first' ? 1 : -1;
+                        while ($this->isHoliday()) {
+                            $this->dateTime->modify($step . ' day');
+                        }
+                        $modifyIsDone = true;
+                        break;
+
+                }
+                $str = str_replace($matches[0], '', $str);
+                break;
+
+            // Relative Day/Month
+            case (preg_match('((next|previous|this) (month|year))', $str, $matches)):
+                $str = str_replace($matches[0], '', $str);
+                switch ($matches[1]) {
+                    case 'next':
+                        $d[$matches[2]]++;
+                        break;
+                    case 'previous':
+                        $d[$matches[2]]--;
+                        break;
+                }
+                break;
+
+            // Absolute Date
+            case (preg_match('(([0-9]{1,2} )?(' . implode('|', array_keys(static::$months)) . ')( [0-9]{1,4})?)', $str, $matches)):
+                $d['year'] = isset($matches[3]) && !empty($matches[3]) ? (int)$matches[3] : $d['year'];
+                $d['month'] = static::$months[strtolower($matches[2])];
+                $d['day'] = empty($matches[1]) ? 1 : (int)$matches[1];
+                $str = str_replace($matches[0], '', $str);
+                break;
+
+            // Absolute Date Time
+            case (preg_match('(([0-9]{4})-([0-9]{2})-([0-9]{2}) ([0-9]{2}):([0-9]{2}):([0-9]{2}))', $str, $m)):
+                $d = array('year' => $m[1], 'month' => $m[2], 'day' => $m[3], 'hour' => $m[4], 'minute' => $m[5], 'second' => $m[6]);
+                $str = str_replace($m[0], '', $str);
+                break;
+
+            // Absolute Date
+            case (preg_match('(([0-9]{4})-([0-9]{2})-([0-9]{2}))', $str, $m)):
+                $str = str_replace($m[0], '', $str);
+                $d['year'] = $m[1];
+                $d['month'] = $m[2];
+                $d['day'] = $m[3];
+                break;
+
+            // Absolute Time
+//            case (preg_match('(([0-9]{2}):([0-9]{2}):([0-9]{2}))', $str, $matches)):
+//                $this->dateTime->setTime($matches[1], $matches[2], $matches[3]);
+//                $str = str_replace($matches[0], '', $str);
+//                $modifyIsDone = true;
+//                break;
+
+            // Relative Years
+            case (preg_match('#(([-+]?[0-9]+) years?( ago)?)#', $str, $matches)):
+                $str = str_replace($matches[0], '', $str);
+//                $direction =
+                $d['year'] += $matches[2];
+                break;
+
+            // Relative Months
+            case (preg_match('/(([-+]?[0-9]+) months?( ago)?)/', $str, $matches)):
+                $str = str_replace($matches[1], '', $str);
+                $d['month'] += $matches[2];
+                break;
+
+            // Relative Weekdays
+            case (preg_match('/(([-+]?[0-9]+) ?weekdays?( ago)?)/', $str, $matches)):
+                $step = ($matches[2] < 0 ? -1 : 1) * (isset($matches[3]) ? -1 : 1);
+                $i = 0;
+                while ($i < $step * $matches[2]) {
+                    $this->dateTime->modify($step . ' day');
+                    $i += $this->isHoliday() ? 0 : 1;
+                }
+                $str = str_replace($matches[0], '', $str);
+                $modifyIsDone = true;
+                break;
+
+            // Smaller than a Day Modifications
+            default:
+                $this->dateTime->modify(trim($str));
+                $str = '';
+                $modifyIsDone = true;
+        }
+
+        if (!$modifyIsDone) {
+            $date = static::create($d['year'], $d['month'], $d['day'], $d['hour'], $d['minute'], $d['second'], $this->dateTime->getTimezone());
+
+            // Better not to replace the whole object
+            $this->dateTime->setTimestamp($date->getDateTime()->getTimestamp());
+        }
+
+        if (Carbon::hasRelativeKeywords(trim($str))) {
+            $this->modify($str);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Checks if current day is Holiday.
+     *
+     * Note: Fridays are indeed Holidays.
+     * Maybe we can add more days like new year holidays here.
+     *
+     * @return bool
+     */
+    public function isHoliday()
+    {
+        return $this->dateTime->isFriday();
+    }
+
+    /**
      * Normalizes the given DateTime values and removes wraps.
      *
      * @param null $year
@@ -332,5 +479,21 @@ class jDate
             return jDateTime::jalaliMonthLength($year - 1, 12);
         }
         return jDateTime::jalaliMonthLength($year, $month - 1);
+    }
+
+    /**
+     * @param $date jDate
+     * @return array
+     */
+    private static function getDateArray($date)
+    {
+        return array_combine(array(
+            'year',
+            'month',
+            'day',
+            'hour',
+            'minute',
+            'second',
+        ), explode('-', $date->format('Y-n-j-G-i-s')));
     }
 }
