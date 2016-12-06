@@ -795,7 +795,7 @@ class jDateTime
     /**
      * @param $timestamp
      * @param null $timezone
-     * @return \DateTime|static
+     * @return Carbon
      */
     public static function createDateTime($timestamp = null, $timezone = null)
     {
@@ -811,7 +811,7 @@ class jDateTime
         }
 
         if (is_string($timestamp)) {
-            return new \DateTime($timestamp, $timezone);
+            return new Carbon($timestamp, $timezone);
         }
 
         if (is_numeric($timestamp)) {

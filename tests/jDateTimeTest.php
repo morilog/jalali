@@ -94,7 +94,7 @@ class jDateTimeTest extends PHPUnit_Framework_TestCase
 
         $tzOffset = $this->getTimeZoneOffset('Asia/Tehran', 'UTC');
 
-        $this->assertTrue((((($utcHour * 60) + $utcMin) * 60) - ((($tehranHour * 60) + $tehranMin) * 60)) === $tzOffset);
+        $this->assertTrue((((($utcHour * 60) + $utcMin) * 60) - ((($tehranHour * 60) + $tehranMin) * 60)) === $tzOffset, 'Note: this test fails between 00:00 and 3:30AM');
 
     }
 
