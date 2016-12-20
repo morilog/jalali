@@ -733,7 +733,7 @@ class jDateTime
         $dt['is_dst'] = '';
 
         if (strlen($dt['year']) == 2) {
-            $now = self::forge('now');
+            $now = jDate::forge('now');
             $x = $now->format('Y') - $now->format('y');
             $dt['year'] += $x;
         }
