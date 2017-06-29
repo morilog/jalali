@@ -42,6 +42,23 @@ class jDateTime
     {
         return self::d2g(self::j2d($jy, $jm, $jd));
     }
+    
+    /**
+     * Converts a Jalali date to Gregorian.
+     *
+     * @param int $jy
+     * @param int $jm
+     * @param int $jd
+     * @return Gregorian date
+     */
+    public statis function toGregorianDate($jy, $jm, $jd)
+    {
+        $georgianDateArr = self::toGregorian($jy, $jm, $jd);
+        $year = $georgianDateArr[0];
+        $month = $georgianDateArr[1];
+        $day = $georgianDateArr[2];
+        return date("Y-m-d", strtotime("$year-$month-$day"));
+    }
 
     /**
      * Checks whether a Jalaali date is valid or not.
