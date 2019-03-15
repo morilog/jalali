@@ -497,6 +497,35 @@ class Jalalian
         return 6;
     }
 
+    public function getFarsiDayOfWeek(): string
+    {
+        if ($this->isSaturday()) {
+            return 'شنبه';
+        }
+
+        if ($this->isSunday()) {
+            return 'یک‌شنبه';
+        }
+
+        if ($this->isMonday()) {
+            return 'دوشنبه';
+        }
+
+        if ($this->isTuesday()) {
+            return 'سه‌شنبه';
+        }
+
+        if ($this->isWednesday()) {
+            return 'چهارشنبه';
+        }
+
+        if ($this->isThursday()) {
+            return 'پنج‌شنبه';
+        }
+
+        return 'جمعه';
+    }
+    
     public function isSunday(): bool
     {
         return $this->isDayOfWeek(Carbon::SUNDAY);
