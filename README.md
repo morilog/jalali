@@ -56,8 +56,6 @@ $date = Jalalian::forge('last sunday')->format('time'); // 00:00:00
 
 // get relative 'ago' format
 $date = Jalalian::forge('now - 10 minutes')->ago() // 10 دقیقه پیش
-// OR
-$date = Jalalian::forge('now - 10 minutes')->ago() // 10 دقیقه پیش
 ```
 
 #### Methods api
