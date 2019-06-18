@@ -151,6 +151,10 @@ class Jalalian
         return $this->year;
     }
 
+    /**
+     * @param int $months
+     * @return Jalalian
+     */
     public function subMonths(int $months = 1): Jalalian
     {
         Assertion::greaterOrEqualThan($months, 1);
@@ -174,10 +178,14 @@ class Jalalian
         }
 
         $years = abs((int)($diff / 12));
+        $diff = 12 - abs($diff % 12) - $this->getMonth();
+        if ($diff < 0) {
+            $diff = 12 - abs($diff);
+            $years++;
+        }
         $date = $years > 0 ? $this->subYears($years) : clone $this;
-        $diff = 12 - abs($diff % 12) - $date->getMonth();
 
-        return $diff > 0 ? $date->subYears(1)->addMonths($diff) : $date->subYears(1);
+        return ($diff > 0 ? $date->subYears(1)->addMonths($diff) : $date->subYears(1));
     }
 
     /**
