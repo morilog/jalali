@@ -20,7 +20,7 @@ morilog/jalali
 
 Run the Composer update command
 
-    $ composer require morilog/jalali:3.*
+    $ composer require "morilog/jalali:3.*"
 
 <a name="basic-usage"></a>
 ## Basic Usage
