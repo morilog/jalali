@@ -670,6 +670,11 @@ class CalendarUtils
         return ($shorten) ? mb_substr($ret, 0, $len, 'UTF-8') : $ret;
     }
 
+    public static function getMonthName($month, $shorten = false, $len = 3)
+    {
+        return self::getMonthNames($month, $shorten, $len);
+    }
+
     private static function filterArray($needle, $haystack, $always = array())
     {
         foreach ($haystack as $k => $v) {
