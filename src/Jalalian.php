@@ -552,9 +552,9 @@ class Jalalian
         return $this->format('Y-m-d H:i:s');
     }
 
-    public function format(string $format): string
+    public function format(string $format, bool $dariMonth = false): string
     {
-        return CalendarUtils::strftime($format, $this->toCarbon());
+        return CalendarUtils::strftime($format, $this->toCarbon(), $dariMonth);
     }
 
     public function __toString(): string

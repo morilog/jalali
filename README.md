@@ -49,6 +49,10 @@ $date = Jalalian::forge('last sunday')->getTimestamp(); // 1333857600
 $date = Jalalian::forge('last sunday')->format('%B %d، %Y'); // دی 02، 1391
 $date = Jalalian::forge('today')->format('%A, %d %B %y'); // جمعه، 23 اسفند 97
 
+// get month name in Dari
+$date = Jalalian::forge('last sunday')->format('%B %d، %Y', true); // دی 02، 1391
+$date = Jalalian::forge('today')->format('%A, %d %B %y', true); // جمعه، 23 حوت 97
+
 // get a predefined format
 $date = Jalalian::forge('last sunday')->format('datetime'); // 1391-10-02 00:00:00
 $date = Jalalian::forge('last sunday')->format('date'); // 1391-10-02
@@ -645,7 +649,7 @@ public function getNextMonth(): Jalalian
 \Morilog\Jalali\CalendarUtils::toGregorian(1395, 2, 18); // [2016, 5, 7]
 ```
 ---
-#### `strftime($format, [$timestamp = false, $timezone = null])`
+#### `strftime($format, [$timestamp = false, $dariMonth = false, $timezone = null])`
 ```php
 CalendarUtils::strftime('Y-m-d', strtotime('2016-05-8')); // 1395-02-19
 ```

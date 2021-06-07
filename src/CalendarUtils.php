@@ -322,7 +322,7 @@ class CalendarUtils
      * @param bool $timezone
      * @return mixed
      */
-    public static function date($format, $stamp = false, $timezone = null)
+    public static function date($format, $stamp = false, $dariMonth = false, $timezone = null)
     {
         $stamp = ($stamp !== false) ? $stamp : time();
         $dateTime = static::createDateTime($stamp, $timezone);
@@ -414,13 +414,13 @@ class CalendarUtils
                     break;
                 //Month
                 case 'F':
-                    $v = self::getMonthNames($jMonth);
+                    $v = self::getMonthNames($jMonth, $dariMonth);
                     break;
                 case 'm':
                     $v = sprintf("%02d", $jMonth);
                     break;
                 case 'M':
-                    $v = self::getMonthNames($jMonth, true);
+                    $v = self::getMonthNames($jMonth, $dariMonth, true);
                     break;
                 case 'n':
                     $v = $jMonth;
@@ -457,7 +457,7 @@ class CalendarUtils
                     break;
                 case 'r':
                     $v = self::getDayNames($dateTime->format('D'), true) . ', ' . sprintf("%02d",
-                            $jDay) . ' ' . self::getMonthNames($jMonth, true);
+                            $jDay) . ' ' . self::getMonthNames($jMonth, $dariMonth, true);
                     $v .= ' ' . $jYear . ' ' . $dateTime->format('H') . ':' . $dateTime->format('i') . ':' . $dateTime->format('s') . ' ' . $dateTime->format('P');
                     break;
                 //Timezone
@@ -487,7 +487,7 @@ class CalendarUtils
      * @param null $timezone
      * @return mixed
      */
-    public static function strftime($format, $stamp = false, $timezone = null)
+    public static function strftime($format, $stamp = false, $dariMonth = false, $timezone = null)
     {
         $str_format_code = array(
             "%a",
@@ -579,7 +579,7 @@ class CalendarUtils
         $format = str_replace($str_format_code, $date_format_code, $format);
 
         //Convert to date
-        return self::date($format, $stamp, $timezone);
+        return self::date($format, $stamp, $dariMonth, $timezone);
     }
 
     private static function getDayNames($day, $shorten = false, $len = 1, $numeric = false)
@@ -628,45 +628,45 @@ class CalendarUtils
         return ($numeric) ? $n : (($shorten) ? mb_substr($ret, 0, $len, 'UTF-8') : $ret);
     }
 
-    private static function getMonthNames($month, $shorten = false, $len = 3)
+    private static function getMonthNames($month, $dariMonth = false, $shorten = false, $len = 3)
     {
         $ret = '';
         switch ($month) {
             case '1':
-                $ret = 'فروردین';
+                $ret = $dariMonth ? 'حمل' : 'فروردین';
                 break;
             case '2':
-                $ret = 'اردیبهشت';
+                $ret = $dariMonth ? 'ثور' : 'اردیبهشت';
                 break;
             case '3':
-                $ret = 'خرداد';
+                $ret = $dariMonth ? 'جوزا' : 'خرداد';
                 break;
             case '4':
-                $ret = 'تیر';
+                $ret = $dariMonth ? 'سرطان' : 'تیر';
                 break;
             case '5':
-                $ret = 'مرداد';
+                $ret = $dariMonth ? 'اسد' : 'مرداد';
                 break;
             case '6':
-                $ret = 'شهریور';
+                $ret = $dariMonth ? 'سنبله' : 'شهریور';
                 break;
             case '7':
-                $ret = 'مهر';
+                $ret = $dariMonth ? 'میزان' : 'مهر';
                 break;
             case '8':
-                $ret = 'آبان';
+                $ret = $dariMonth ? 'عقرب' : 'آبان';
                 break;
             case '9':
-                $ret = 'آذر';
+                $ret = $dariMonth ? 'قوس' : 'آذر';
                 break;
             case '10':
-                $ret = 'دی';
+                $ret = $dariMonth ? 'جدی' : 'دی';
                 break;
             case '11':
-                $ret = 'بهمن';
+                $ret = $dariMonth ? 'دلو' : 'بهمن';
                 break;
             case '12':
-                $ret = 'اسفند';
+                $ret = $dariMonth ? 'حوت' : 'اسفند';
                 break;
         }
 
