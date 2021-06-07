@@ -50,7 +50,7 @@ $date = Jalalian::forge('last sunday')->format('%B %d، %Y'); // دی 02، 1391
 $date = Jalalian::forge('today')->format('%A, %d %B %y'); // جمعه، 23 اسفند 97
 
 // get month name in Dari
-$date = Jalalian::forge('last sunday')->format('%B %d، %Y', true); // دی 02، 1391
+$date = Jalalian::forge('last sunday')->format('%B %d، %Y', true); // جدی 02، 1391
 $date = Jalalian::forge('today')->format('%A, %d %B %y', true); // جمعه، 23 حوت 97
 
 // get a predefined format
