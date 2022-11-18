@@ -3,6 +3,7 @@
 namespace Morilog\Jalali;
 
 use Carbon\Carbon;
+use simplehtmldom\HtmlWeb;
 
 /**
  * Class jDateTime
@@ -277,9 +278,9 @@ class CalendarUtils
     public static function g2d($gy, $gm, $gd)
     {
         return (self::div(($gy + self::div($gm - 8, 6) + 100100) * 1461, 4)
-            + self::div(153 * self::mod($gm + 9, 12) + 2, 5)
-            + $gd - 34840408
-        ) - self::div(self::div($gy + 100100 + self::div($gm - 8, 6), 100) * 3, 4) + 752;
+                + self::div(153 * self::mod($gm + 9, 12) + 2, 5)
+                + $gd - 34840408
+            ) - self::div(self::div($gy + 100100 + self::div($gm - 8, 6), 100) * 3, 4) + 752;
     }
 
     /**
@@ -431,11 +432,11 @@ class CalendarUtils
                     }
                     self::$temp['z'] = $v;
                     break;
-                    //Week
+                //Week
                 case 'W':
                     $v = is_int(self::$temp['z'] / 7) ? (self::$temp['z'] / 7) : intval(self::$temp['z'] / 7 + 1);
                     break;
-                    //Month
+                //Month
                 case 'F':
                     $v = self::getMonthName($jMonth);
                     break;
@@ -451,7 +452,7 @@ class CalendarUtils
                 case 't':
                     $v = ($jMonth == 12) ? (self::isLeapJalaliYear($jYear) ? 30 : 29) : ($jMonth > 6 ? 30 : 31);
                     break;
-                    //Year
+                //Year
                 case 'L':
                     $tmpObj = static::createDateTime(time() - 31536000, $timezone);
                     $v = $tmpObj->format('L');
@@ -466,26 +467,26 @@ class CalendarUtils
                         $v = '0' . $v;
                     }
                     break;
-                    //Time
+                //Time
                 case 'a':
                     $v = ($dateTime->format('a') == 'am') ? 'ق.ظ' : 'ب.ظ';
                     break;
                 case 'A':
                     $v = ($dateTime->format('A') == 'AM') ? 'قبل از ظهر' : 'بعد از ظهر';
                     break;
-                    //Full Dates
+                //Full Dates
                 case 'c':
                     $v = $jYear . '-' . sprintf("%02d", $jMonth) . '-' . sprintf("%02d", $jDay) . 'T';
                     $v .= $dateTime->format('H') . ':' . $dateTime->format('i') . ':' . $dateTime->format('s') . $dateTime->format('P');
                     break;
                 case 'r':
                     $v = self::getDayNames($dateTime->format('D'), true) . ', ' . sprintf(
-                        "%02d",
-                        $jDay
-                    ) . ' ' . self::getMonthName($jMonth, true);
+                            "%02d",
+                            $jDay
+                        ) . ' ' . self::getMonthName($jMonth, true);
                     $v .= ' ' . $jYear . ' ' . $dateTime->format('H') . ':' . $dateTime->format('i') . ':' . $dateTime->format('s') . ' ' . $dateTime->format('P');
                     break;
-                    //Timezone
+                //Timezone
                 case 'e':
                     $v = $dateTime->format('e');
                     break;
@@ -853,5 +854,45 @@ class CalendarUtils
 
 
         throw new \InvalidArgumentException('timezone is not valid');
+    }
+
+    const TIME_IR_BASE_URI = "https://www.time.ir/fa/event/list/0/";
+
+    public static function events(int $year, int $month, int $day = null): array
+    {
+        $date = self::makeDateString($year, $month, $day);
+
+        $client = new HtmlWeb();
+        $html = $client->load(self::TIME_IR_BASE_URI . $date);
+
+        try {
+            return array_map(function ($event) use ($year, $month, $day) {
+                $additionalDescription = $event->find('span[style=white-space: nowrap] > span[dir=ltr]', 0);
+                return [
+                    'date' => self::makeDateString($year, $month, $day ?? self::fa2en(explode(' ', trim($event->find('span', 0)->innertext))[0]), '-'),
+                    'day' => trim($event->find('span', 0)->innertext),
+                    'description' => trim($event->nodes[1]->innertext),
+                    'additional_description' => !is_null($additionalDescription) ? trim(preg_replace("/\[|\]/", "", $additionalDescription->text())) : null,
+                    'is_holiday' => $event->getAttribute('class') == 'eventHoliday',
+                ];
+            }, $html->find("ul[class=list-unstyled] > li"));
+        } catch (\Exception $exception) {
+            throw $exception;
+        }
+    }
+
+    private static function makeDateString(int $year, int $month, int $day = null, $splitter = '/'): string
+    {
+        $month = (strlen($month) == 1) ? "0{$month}" : $month;
+        $day = (!is_null($day) && strlen($day) == 1) ? "0{$day}" : $day;
+        return is_null($day) ? "{$year}{$splitter}{$month}" : "{$year}{$splitter}{$month}{$splitter}{$day}";
+    }
+
+    private static function fa2en(string $text): string
+    {
+        $fa_num = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹', '٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+        $en_num = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+
+        return str_replace($fa_num, $en_num, $text);
     }
 }

@@ -123,7 +123,7 @@ class Jalalian
 
         return static::fromCarbon(new Carbon($dateTime, $timeZone));
     }
-    
+
     public function getFirstDayOfWeek(): Jalalian
     {
         return (new static(
@@ -659,5 +659,15 @@ class Jalalian
     public function getWeekOfMonth(): int
     {
         return floor(($this->day + 5 - $this->getDayOfWeek()) / 7) + 1;
+    }
+
+    public function dayEvents()
+    {
+        return CalendarUtils::events($this->year, $this->month, $this->day);
+    }
+
+    public function monthEvents()
+    {
+        return CalendarUtils::events($this->year, $this->month);
     }
 }
