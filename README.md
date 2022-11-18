@@ -570,6 +570,22 @@ $date = (new Jalalian(1397, 5, 24))->getDayOfYear()
 
 ---
 ```php
+public function dayEvents(): string
+$date = (new Jalalian(1401, 8, 27))->dayEvents()
+// output: array of events
+
+```
+
+---
+```php
+public function monthEvents(): string
+$date = (new Jalalian(1401, 8, 27))->monthEvents()
+// output: array of events
+
+```
+
+---
+```php
 public function toString(): string
 $date = (new Jalalian(1397, 5, 24))->isPast()
 // output: 1397-05-24 00:00:00
