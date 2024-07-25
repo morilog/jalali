@@ -785,4 +785,17 @@ class Jalalian
 
         return [$yearDiff, $monthDiff, $dayDiff];
     }
+
+    public function getEndOfMonth(): Jalalian
+    {
+        return new static(
+            $this->getYear(),
+            $this->getMonth(),
+            $this->getMonthDays(),
+            $this->getHour(),
+            $this->getMinute(),
+            $this->getSecond(),
+            $this->getTimezone()
+        );
+    }
 }
