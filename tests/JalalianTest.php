@@ -426,4 +426,36 @@ final class JalalianTest extends TestCase
         //greater year, greater month, greater day
         $this->assertEquals($jDate->diff(new Jalalian(1405, 9, 30)), [4, 3, 4]);
     }
+
+    public function testNegativeAgo()
+    {
+        $jDate = Jalalian::now();
+
+        $postfix = 'پیش';
+
+        $seconds = rand(1, 59);
+        $this->assertEquals($jDate->subSeconds($seconds)->ago(), sprintf('%s %s %s', $seconds, 'ثانیه', $postfix));
+
+        $minutes = rand(1, 59);
+        $this->assertEquals($jDate->subMinutes($minutes)->ago(), sprintf('%s %s %s', $minutes, 'دقیقه', $postfix));
+
+        $hour = rand(1, 23);
+        $this->assertEquals($jDate->subHours($hour)->ago(), sprintf('%s %s %s', $hour, 'ساعت', $postfix));
+    }
+
+    public function testPositiveAgo()
+    {
+        $jDate = Jalalian::now();
+
+        $postfix = 'دیگر';
+
+        $seconds = rand(1, 59);
+        $this->assertEquals($jDate->addSeconds($seconds)->ago(), sprintf('%s %s %s', $seconds, 'ثانیه', $postfix));
+
+        $minutes = rand(1, 59);
+        $this->assertEquals($jDate->addMinutes($minutes)->ago(), sprintf('%s %s %s', $minutes, 'دقیقه', $postfix));
+
+        $hour = rand(1, 23);
+        $this->assertEquals($jDate->addHours($hour)->ago(), sprintf('%s %s %s', $hour, 'ساعت', $postfix));
+    }
 }
