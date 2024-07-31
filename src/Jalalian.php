@@ -712,7 +712,7 @@ class Jalalian
         $difference = intval(round($difference));
 
         // return
-        return number_format($difference) . ' ' . $periods[$j] . ' ' . (isset($negative) ? '' : 'پیش');
+        return number_format($difference) . ' ' . $periods[$j] . ' ' . (isset($negative) ? 'دیگر' : 'پیش');
     }
 
     public function getTimestamp(): int
