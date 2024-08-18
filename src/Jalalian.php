@@ -125,7 +125,7 @@ class Jalalian
 
         return static::fromCarbon(new Carbon($dateTime, $timeZone));
     }
-    
+
     public function getFirstDayOfWeek(): Jalalian
     {
         return (new static(
@@ -784,5 +784,14 @@ class Jalalian
         }
 
         return [$yearDiff, $monthDiff, $dayDiff];
+    }
+
+    /**
+     * @param string $dayName One of: شنبه, یکشنبه, دوشنبه, سه‌شنبه, چهارشنبه, پنج‌شنبه, جمعه
+     * @return Jalalian
+     */
+    public function next(string $dayName): Jalalian
+    {
+        return $this->fromCarbon($this->toCarbon()->next($this->toCarbonDayName($dayName)));
     }
 }
