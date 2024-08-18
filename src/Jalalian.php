@@ -794,4 +794,13 @@ class Jalalian
     {
         return $this->fromCarbon($this->toCarbon()->next($this->toCarbonDayName($dayName)));
     }
+
+    /**
+     * @param string $dayName One of: شنبه, یکشنبه, دوشنبه, سه‌شنبه, چهارشنبه, پنج‌شنبه, جمعه
+     * @return Jalalian
+     */
+    public function previous(string $dayName): Jalalian
+    {
+        return $this->fromCarbon($this->toCarbon()->previous($this->toCarbonDayName($dayName)));
+    }
 }

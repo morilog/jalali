@@ -432,4 +432,10 @@ final class JalalianTest extends TestCase
         $jDate = new Jalalian(1403, 05, 28);
         $this->assertEquals('1403-05-30', $jDate->next('سه‌شنبه')->format('Y-m-d'));
     }
+
+    public function testPrevious()
+    {
+        $jDate = new Jalalian(1403, 05, 28);
+        $this->assertEquals('1403-05-22', $jDate->previous('دوشنبه')->format('Y-m-d'));
+    }
 }
