@@ -682,21 +682,21 @@ class CalendarUtils
         $keys = array(
             'Y' => array('year', '\d{4}'),
             'y' => array('year', '\d{2}'),
-            'm' => array('month', '\d{2}'),
+            'm' => array('month', '\d{1,2}'),
             'n' => array('month', '\d{1,2}'),
             'M' => array('month', '[A-Z][a-z]{3}'),
             'F' => array('month', '[A-Z][a-z]{2,8}'),
-            'd' => array('day', '\d{2}'),
+            'd' => array('day', '\d{1,2}'),
             'j' => array('day', '\d{1,2}'),
             'D' => array('day', '[A-Z][a-z]{2}'),
             'l' => array('day', '[A-Z][a-z]{6,9}'),
             'u' => array('hour', '\d{1,6}'),
-            'h' => array('hour', '\d{2}'),
-            'H' => array('hour', '\d{2}'),
+            'h' => array('hour', '\d{1,2}'),
+            'H' => array('hour', '\d{1,2}'),
             'g' => array('hour', '\d{1,2}'),
             'G' => array('hour', '\d{1,2}'),
-            'i' => array('minute', '\d{2}'),
-            's' => array('second', '\d{2}'),
+            'i' => array('minute', '\d{1,2}'),
+            's' => array('second', '\d{1,2}'),
         );
 
         // convert format string to regex
