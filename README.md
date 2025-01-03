@@ -395,6 +395,14 @@ $date = Jalalian::now()->lessThanOrEqualsToCarbon(Carbon::now()))
 
 ---
 ```php
+public function getFirstDayOfWeek(): bool
+
+$date = (new Jalalian(1403, 10, 14))->getFirstDayOfWeek()
+// output: 1403, 10, 8
+
+```
+---
+```php
 public function isStartOfWeek(): bool
 
 $date = (new Jalalian(1397, 6, 24))->isStartOfWeek()
