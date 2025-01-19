@@ -78,7 +78,7 @@ class Jalalian
         $this->timezone = $timezone;
     }
 
-    public static function now(\DateTimeZone $timeZone = null): Jalalian
+    public static function now(?\DateTimeZone $timeZone = null): Jalalian
     {
         return static::fromCarbon(Carbon::now($timeZone));
     }
@@ -102,12 +102,12 @@ class Jalalian
         );
     }
 
-    public static function fromFormat(string $format, string $timestamp, \DateTimeZone $timeZone = null): Jalalian
+    public static function fromFormat(string $format, string $timestamp, ?\DateTimeZone $timeZone = null): Jalalian
     {
         return static::fromCarbon(CalendarUtils::createCarbonFromFormat($format, $timestamp, $timeZone));
     }
 
-    public static function forge($timestamp, \DateTimeZone $timeZone = null): Jalalian
+    public static function forge($timestamp, ?\DateTimeZone $timeZone = null): Jalalian
     {
         return static::fromDateTime($timestamp, $timeZone);
     }
@@ -117,7 +117,7 @@ class Jalalian
      * @param \DateTimeZone|null $timeZone
      * @return Jalalian
      */
-    public static function fromDateTime($dateTime, \DateTimeZone $timeZone = null): Jalalian
+    public static function fromDateTime($dateTime, ?\DateTimeZone $timeZone = null): Jalalian
     {
         if (is_numeric($dateTime)) {
             return static::fromCarbon(Carbon::createFromTimestamp($dateTime, $timeZone));
