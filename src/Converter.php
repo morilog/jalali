@@ -2,6 +2,7 @@
 
 namespace Morilog\Jalali;
 
+use Carbon\CarbonInterface;
 use Carbon\Exceptions\UnitException;
 use Date;
 
@@ -141,4 +142,29 @@ trait Converter
         return $this->format('F Y');
     }
 
+    /**
+     * Change persian day name to CarbonInterface
+     * 
+     * @param string $modifier
+     * 
+     * @return int
+     */
+    public function toCarbonDayName(string $modifier): int
+    {
+        $carbonDayModifiers = [
+            'شنبه'  => CarbonInterface::SATURDAY,
+            'یکشنبه' => CarbonInterface::SUNDAY,
+            'دوشنبه' => CarbonInterface::MONDAY,
+            'سه‌شنبه' => CarbonInterface::TUESDAY,
+            'چهارشنبه' => CarbonInterface::WEDNESDAY,
+            'پنج‌شنبه' => CarbonInterface::THURSDAY,
+            'جمعه' => CarbonInterface::FRIDAY,
+        ];
+
+        if (!isset($carbonDayModifiers[$modifier])) {
+            throw new \InvalidArgumentException('Modifier expected among: شنبه, یکشنبه, دوشنبه, سه‌شنبه, چهارشنبه, پنج‌شنبه و جمعه.');
+        }
+
+        return $carbonDayModifiers[$modifier];
+    }
 }

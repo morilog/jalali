@@ -125,7 +125,7 @@ class Jalalian
 
         return static::fromCarbon(new Carbon($dateTime, $timeZone));
     }
-    
+
     public function getFirstDayOfWeek(): Jalalian
     {
         return (new static(
@@ -753,5 +753,54 @@ class Jalalian
     public function getWeekOfMonth(): int
     {
         return floor(($this->day + 5 - $this->getDayOfWeek()) / 7) + 1;
+    }
+
+    public function diff(Jalalian $ref): array
+    {
+        if ($this->equalsTo($ref)) {
+            return [0, 0, 0];
+        }
+
+        $biggerDate = $this->greaterThan($ref) ? $this : $ref;
+        $biggerYear = $biggerDate->getYear();
+        $biggerMonth = $biggerDate->getMonth();
+        $biggerDay = $biggerDate->getDay();
+        $smallerDate = $this->greaterThan($ref) ? $ref : $this;
+        $smallerYear = $smallerDate->getYear();
+        $smallerMonth = $smallerDate->getMonth();
+        $smallerDay = $smallerDate->getDay();
+
+        $yearDiff = $biggerYear - $smallerYear;
+        $monthDiff = $biggerMonth - $smallerMonth;
+        $dayDiff = $biggerDay - $smallerDay;
+        if ($dayDiff < 0) {
+            $dayDiff = $biggerDay +
+                $smallerDate->getEndDayOfMonth()->getDay() - $smallerDate->getDay();
+            $monthDiff--;
+        }
+        if ($monthDiff < 0) {
+            $monthDiff += 12;
+            $yearDiff--;
+        }
+
+        return [$yearDiff, $monthDiff, $dayDiff];
+    }
+
+    /**
+     * @param string $dayName One of: شنبه, یکشنبه, دوشنبه, سه‌شنبه, چهارشنبه, پنج‌شنبه, جمعه
+     * @return Jalalian
+     */
+    public function next(string $dayName): Jalalian
+    {
+        return $this->fromCarbon($this->toCarbon()->next($this->toCarbonDayName($dayName)));
+    }
+
+    /**
+     * @param string $dayName One of: شنبه, یکشنبه, دوشنبه, سه‌شنبه, چهارشنبه, پنج‌شنبه, جمعه
+     * @return Jalalian
+     */
+    public function previous(string $dayName): Jalalian
+    {
+        return $this->fromCarbon($this->toCarbon()->previous($this->toCarbonDayName($dayName)));
     }
 }

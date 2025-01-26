@@ -370,4 +370,72 @@ final class JalalianTest extends TestCase
         $jDate = new Jalalian(1402, 7, 23);
         $this->assertEquals(3, $jDate->getQuarter());
     }
+
+    public function testdiff()
+    {
+        $jDate = new Jalalian(1401, 6, 26);
+
+        //same day
+        $this->assertEquals($jDate->diff(new Jalalian(1401, 6, 26)), [0, 0, 0]);
+
+        //year before
+        $this->assertEquals($jDate->diff(new Jalalian(1401, 6, 25)), [0, 0, 1]);
+
+        //day after
+        $this->assertEquals($jDate->diff(new Jalalian(1401, 6, 27)), [0, 0, 1]);
+
+        //same montt, same year, before
+        $this->assertEquals($jDate->diff(new Jalalian(1401, 6, 24)), [0, 0, 2]);
+
+        //same month, same year, after
+        $this->assertEquals($jDate->diff(new Jalalian(1401, 6, 28)), [0, 0, 2]);
+
+        //same year, before, smaller day
+        $this->assertEquals($jDate->diff(new Jalalian(1401, 4, 12)), [0, 2, 14]);
+
+        //same year, before, greater day
+        $this->assertEquals($jDate->diff(new Jalalian(1401, 4, 27)), [0, 1, 30]);
+
+        //same year, after, smaller day
+        $this->assertEquals($jDate->diff(new Jalalian(1401, 9, 10)), [0, 2, 15]);
+
+        //same year, after, greater day
+        $this->assertEquals($jDate->diff(new Jalalian(1401, 10, 28)), [0, 4, 2]);
+
+        //previous year, smaller month, smaller day
+        $this->assertEquals($jDate->diff(new Jalalian(1389, 4, 12)), [12, 2, 14]);
+
+        //previous year, smaller month, greater day
+        $this->assertEquals($jDate->diff(new Jalalian(1395, 4, 29)), [6, 1, 28]);
+
+        //previous year, greater month, smaller day
+        $this->assertEquals($jDate->diff(new Jalalian(1395, 9, 10)), [5, 9, 16]);
+
+        //previous year, greater month, greater day
+        $this->assertEquals($jDate->diff(new Jalalian(1395, 9, 30)), [5, 8, 26]);
+
+        //greater year, smaller month, smaller day
+        $this->assertEquals($jDate->diff(new Jalalian(1402, 4, 12)), [0, 9, 17]);
+
+        //greater year, smaller month, greater day
+        $this->assertEquals($jDate->diff(new Jalalian(1403, 4, 29)), [1, 10, 3]);
+
+        //greater year, greater month, smaller day
+        $this->assertEquals($jDate->diff(new Jalalian(1405, 9, 10)), [4, 2, 15]);
+
+        //greater year, greater month, greater day
+        $this->assertEquals($jDate->diff(new Jalalian(1405, 9, 30)), [4, 3, 4]);
+    }
+
+    public function testNext()
+    {
+        $jDate = new Jalalian(1403, 05, 28);
+        $this->assertEquals('1403-05-30', $jDate->next('سه‌شنبه')->format('Y-m-d'));
+    }
+
+    public function testPrevious()
+    {
+        $jDate = new Jalalian(1403, 05, 28);
+        $this->assertEquals('1403-05-22', $jDate->previous('دوشنبه')->format('Y-m-d'));
+    }
 }
