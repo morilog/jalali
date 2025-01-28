@@ -712,7 +712,7 @@ class Jalalian
         $difference = intval(round($difference));
 
         // return
-        return number_format($difference) . ' ' . $periods[$j] . ' ' . (isset($negative) ? '' : 'پیش');
+        return number_format($difference) . ' ' . $periods[$j] . ' ' . (isset($negative) ? 'دیگر' : 'پیش');
     }
 
     public function getTimestamp(): int
@@ -753,5 +753,36 @@ class Jalalian
     public function getWeekOfMonth(): int
     {
         return floor(($this->day + 5 - $this->getDayOfWeek()) / 7) + 1;
+    }
+
+    public function diff(Jalalian $ref): array
+    {
+        if ($this->equalsTo($ref)) {
+            return [0, 0, 0];
+        }
+
+        $biggerDate = $this->greaterThan($ref) ? $this : $ref;
+        $biggerYear = $biggerDate->getYear();
+        $biggerMonth = $biggerDate->getMonth();
+        $biggerDay = $biggerDate->getDay();
+        $smallerDate = $this->greaterThan($ref) ? $ref : $this;
+        $smallerYear = $smallerDate->getYear();
+        $smallerMonth = $smallerDate->getMonth();
+        $smallerDay = $smallerDate->getDay();
+
+        $yearDiff = $biggerYear - $smallerYear;
+        $monthDiff = $biggerMonth - $smallerMonth;
+        $dayDiff = $biggerDay - $smallerDay;
+        if ($dayDiff < 0) {
+            $dayDiff = $biggerDay +
+                $smallerDate->getEndDayOfMonth()->getDay() - $smallerDate->getDay();
+            $monthDiff--;
+        }
+        if ($monthDiff < 0) {
+            $monthDiff += 12;
+            $yearDiff--;
+        }
+
+        return [$yearDiff, $monthDiff, $dayDiff];
     }
 }
