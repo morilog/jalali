@@ -755,7 +755,7 @@ class Jalalian
         return floor(($this->day + 5 - $this->getDayOfWeek()) / 7) + 1;
     }
 
-    public function getMonthName(int $month, ?bool $ir = true)
+    public static function getMonthName(int $month, ?bool $ir = true)
     {
         if ($ir) {
             return CalendarUtils::IRANIAN_MONTHS_NAME[$month - 1];
