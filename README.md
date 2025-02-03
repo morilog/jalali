@@ -639,7 +639,12 @@ public function getNextMonth(): Jalalian
 ```
 
 ---
+```php
+public function diff(Jalalian $ref): array
+$diff = (new Jalalian(1397, 5, 24))->diff(new Jalalian(1398, 6, 30));
+// output: [1, 1, 6]
 
+```
 ### CalendarUtils
 ---
 
