@@ -20,7 +20,7 @@ morilog/jalali
 
 Run the Composer update command
 
-    $ composer require morilog/jalali:3.*
+    $ composer require morilog/jalali "3.*"
 
 <a name="basic-usage"></a>
 ## Basic Usage
@@ -421,8 +421,8 @@ $date = (new Jalalian(1397, 6, 24))->getEndDayOfYear()
 ```php
 public function getEndDayOfMonth(): bool
 
-$date = (new Jalalian(1397, 6, 24))->getEndDayOfYear()
-// output: 1397, 6, 30
+$date = (new Jalalian(1397, 6, 24))->getEndDayOfMonth()
+// output: 1397, 6, 31
 
 ```
 ---
@@ -592,7 +592,7 @@ $date = (new Jalalian(1397, 5, 24))->getDayOfYear()
 ---
 ```php
 public function toString(): string
-$date = (new Jalalian(1397, 5, 24))->isPast()
+$date = (new Jalalian(1397, 5, 24))->toString()
 // output: 1397-05-24 00:00:00
 
 ```
@@ -639,7 +639,12 @@ public function getNextMonth(): Jalalian
 ```
 
 ---
+```php
+public function diff(Jalalian $ref): array
+$diff = (new Jalalian(1397, 5, 24))->diff(new Jalalian(1398, 6, 30));
+// output: [1, 1, 6]
 
+```
 ### CalendarUtils
 ---
 
