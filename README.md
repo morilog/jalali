@@ -413,7 +413,7 @@ $date = (new Jalalian(1397, 6, 24))->getEndDayOfYear()
 ```php
 public function getFirstDayOfMonth(): bool
 
-$date = (new Jalalian(1397, 6, 24))->getEndDayOfYear()
+$date = (new Jalalian(1397, 6, 24))->getFirstDayOfMonth()
 // output: 1397, 6, 1
 
 ```
@@ -421,7 +421,7 @@ $date = (new Jalalian(1397, 6, 24))->getEndDayOfYear()
 ```php
 public function getEndDayOfMonth(): bool
 
-$date = (new Jalalian(1397, 6, 24))->getEndDayOfYear()
+$date = (new Jalalian(1397, 6, 24))->getEndDayOfMonth()
 // output: 1397, 6, 30
 
 ```
