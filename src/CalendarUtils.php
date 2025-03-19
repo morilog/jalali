@@ -625,7 +625,7 @@ class CalendarUtils
                 break;
             case 'tue':
             case 'tuesday':
-                $ret = 'سه‌شنبه';
+                $ret = 'سه شنبه';
                 $n = 4;
                 break;
             case 'wed':
@@ -635,7 +635,7 @@ class CalendarUtils
                 break;
             case 'thu':
             case 'thursday':
-                $ret = 'پنج‌شنبه';
+                $ret = 'پنج شنبه';
                 $n = 6;
                 break;
             case 'fri':
