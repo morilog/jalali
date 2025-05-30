@@ -682,11 +682,11 @@ class CalendarUtils
         $keys = array(
             'Y' => array('year', '\d{4}'),
             'y' => array('year', '\d{2}'),
-            'm' => array('month', '\d{2}'),
+            'm' => array('month', '\d{1,2}'),
             'n' => array('month', '\d{1,2}'),
             'M' => array('month', '[A-Z][a-z]{3}'),
             'F' => array('month', '[A-Z][a-z]{2,8}'),
-            'd' => array('day', '\d{2}'),
+            'd' => array('day', '\d{1,2}'),
             'j' => array('day', '\d{1,2}'),
             'D' => array('day', '[A-Z][a-z]{2}'),
             'l' => array('day', '[A-Z][a-z]{6,9}'),
