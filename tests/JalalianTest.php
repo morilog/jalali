@@ -370,4 +370,60 @@ final class JalalianTest extends TestCase
         $jDate = new Jalalian(1402, 7, 23);
         $this->assertEquals(3, $jDate->getQuarter());
     }
+
+    public function testIsSameAs()
+    {
+        $jDate1 = new Jalalian(1398, 6, 13);
+        $jDate2 = new Jalalian(1398, 12, 13);
+        $jDate3 = new Jalalian(1398, 6, 14);
+        $jDate4 = new Jalalian(1374, 6, 13);
+
+        // Test same year and day
+        $this->assertTrue($jDate1->isSameAs('Y-d', $jDate2));
+        
+        // Test different day
+        $this->assertFalse($jDate1->isSameAs('Y-d', $jDate3));
+        
+        // Test same month and day
+        $this->assertTrue($jDate1->isSameAs('md', $jDate1));
+        $this->assertTrue($jDate1->isSameAs('md', $jDate4));
+        
+        // Test with string date
+        $this->assertTrue($jDate1->isSameAs('Y-m-d', '1398-06-13'));
+    }
+
+    public function testIsBirthday()
+    {
+        // Test with same month and day (should be birthday)
+        $birthday = new Jalalian(1376, 6, 5);
+        $currentDate = new Jalalian(1398, 6, 5);
+        $this->assertTrue($birthday->isBirthday($currentDate));
+        
+        // Test with different day (should not be birthday)
+        $currentDate = new Jalalian(1398, 6, 6);
+        $this->assertFalse($birthday->isBirthday($currentDate));
+        
+        // Test with different month (should not be birthday)
+        $currentDate = new Jalalian(1398, 7, 5);
+        $this->assertFalse($birthday->isBirthday($currentDate));
+        
+        // Test with string date
+        $this->assertTrue($birthday->isBirthday('1398-06-05'));
+        $this->assertFalse($birthday->isBirthday('1398-06-06'));
+        
+        // Test with null (should use current date)
+        $now = Jalalian::now();
+        $sameMonthDay = new Jalalian($now->getYear() - 5, $now->getMonth(), $now->getDay());
+        $this->assertTrue($sameMonthDay->isBirthday());
+        
+        // Test edge case: leap year
+        $leapYearBirthday = new Jalalian(1395, 12, 30); // leap year
+        $nonLeapYear = new Jalalian(1396, 12, 29); // non-leap year (max day is 29)
+        $this->assertFalse($leapYearBirthday->isBirthday($nonLeapYear));
+        
+        // Test different years but same month/day
+        $birthday1 = new Jalalian(1370, 3, 15);
+        $birthday2 = new Jalalian(1380, 3, 15);
+        $this->assertTrue($birthday1->isBirthday($birthday2));
+    }
 }

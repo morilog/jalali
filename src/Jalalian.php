@@ -754,4 +754,55 @@ class Jalalian
     {
         return floor(($this->day + 5 - $this->getDayOfWeek()) / 7) + 1;
     }
+
+    /**
+     * Compares the formatted values of the two dates.
+     *
+     * @example
+     * ```
+     * Jalalian::fromFormat('Y-m-d', '1398-06-13')->isSameAs('Y-d', Jalalian::fromFormat('Y-m-d', '1398-12-13')); // true
+     * Jalalian::fromFormat('Y-m-d', '1398-06-13')->isSameAs('Y-d', Jalalian::fromFormat('Y-m-d', '1398-06-14')); // false
+     * ```
+     *
+     * @param string $format date formats to compare.
+     * @param Jalalian|string $date instance to compare with.
+     */
+    public function isSameAs(string $format, Jalalian|string $date): bool
+    {
+        if (is_string($date)) {
+            // Try to parse as Jalali date first
+            try {
+                $date = static::fromFormat('Y-m-d', $date);
+            } catch (\Exception $e) {
+                // If that fails, try as DateTime string
+                $date = static::fromDateTime($date);
+            }
+        }
+        
+        return $this->format($format) === $date->format($format);
+    }
+
+    /**
+     * Check if its the birthday. Compares the date/month values of the two dates.
+     *
+     * @example
+     * ```
+     * Jalalian::now()->subYears(5)->isBirthday(); // true
+     * Jalalian::now()->subYears(5)->subDay()->isBirthday(); // false
+     * Jalalian::fromFormat('Y-m-d', '1398-06-05')->isBirthday(Jalalian::fromFormat('Y-m-d', '1376-06-05')); // true
+     * Jalalian::fromFormat('Y-m-d', '1398-06-05')->isBirthday(Jalalian::fromFormat('Y-m-d', '1376-06-06')); // false
+     * ```
+     *
+     * @param Jalalian|string|null $date The instance to compare with or null to use current day.
+     *
+     * @return bool
+     */
+    public function isBirthday(Jalalian|string|null $date = null): bool
+    {
+        if ($date === null) {
+            $date = static::now();
+        }
+        
+        return $this->isSameAs('md', $date);
+    }
 }
