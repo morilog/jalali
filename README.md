@@ -507,6 +507,31 @@ $date = (new Jalalian(1397, 5, 24))->isPast()
 ```
 
 ---
+
+```php
+public function isSameAs(string $format, Jalalian|string $date): bool
+
+$date1 = new Jalalian(1398, 6, 13);
+$date2 = new Jalalian(1398, 12, 13);
+$date1->isSameAs('Y-d', $date2); // true (same year and day)
+$date1->isSameAs('md', $date2); // false (different month)
+$date1->isSameAs('Y-m-d', '1398-06-13'); // true
+
+```
+
+---
+
+```php
+public function isBirthday(Jalalian|string|null $date = null): bool
+
+$birthday = new Jalalian(1376, 6, 5);
+$birthday->isBirthday('1398-06-05'); // true
+$birthday->isBirthday('1398-06-06'); // false
+$birthday->isBirthday(); // compares with current date
+
+```
+
+---
 ```php
 public function toArray(): array
 $date = (new Jalalian(1397, 6, 24))->toArray()
