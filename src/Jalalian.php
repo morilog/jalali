@@ -40,9 +40,9 @@ class Jalalian
     private $second;
 
     /**
-     * @var \DateTimeZone
-     */
-    private $timezone;
+        * @var \DateTimeZone|null
+        */
+        private $timezone;
 
     public function __construct(
         int $year,
