@@ -1,38 +1,45 @@
 {
-    "name": "moree-dev/jalali",
-    "description": "This Package helps developers to easily work with Jalali (Shamsi or Iranian) dates in PHP applications, based on Jalali (Shamsi) DateTime class.",
-    "license": "MIT",
-    "type": "library",
     "authors": [
         {
-            "name": "Milad Rey",
-            "email": "miladr@gmail.com"
-        }, {
-		    "name": "Morteza Parvini",
-		    "email": "m.parvini@outlook.com"
-	    }
-    ],
-    "keywords": ["Laravel","Date","Datetime","Jalali", "Morilog"],
-    "require": {
-        "php": "^7.0 | ^8.0",
-        "nesbot/carbon": "^1.21 || ^2.0 || ^3.0",
-        "beberlei/assert": "^3.0"
-    },
-    "require-dev" : {
-        "phpunit/phpunit": ">4.0"
-    },
-    "autoload": {
-        "psr-4": {
-            "Morilog\\Jalali\\": "src"
+            "email": "miladr@gmail.com",
+            "name": "Milad Rey"
         },
+        {
+            "email": "m.parvini@outlook.com",
+            "name": "Morteza Parvini"
+        }
+    ],
+    "autoload": {
         "files": [
             "src/helpers.php"
-        ]
+        ],
+        "psr-4": {
+            "Morilog\\Jalali\\": "src"
+        }
     },
     "autoload-dev": {
         "psr-4": {
             "Morilog\\Jalali\\Tests\\": "tests/"
         }
     },
-    "minimum-stablity": "dev"
+    "description": "This Package helps developers to easily work with Jalali (Shamsi or Iranian) dates in PHP applications, based on Jalali (Shamsi) DateTime class.",
+    "keywords": [
+        "Laravel",
+        "Date",
+        "Datetime",
+        "Jalali",
+        "Morilog"
+    ],
+    "license": "MIT",
+    "minimum-stablity": "dev",
+    "name": "moree-dev/jalali",
+    "require": {
+        "beberlei/assert": "^3.0",
+        "nesbot/carbon": "^1.21 || ^2.0 || ^3.0",
+        "php": "^7.1 | ^8.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": ">4.0"
+    },
+    "type": "library"
 }
