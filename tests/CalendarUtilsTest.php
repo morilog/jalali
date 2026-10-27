@@ -109,6 +109,15 @@ class CalendarUtilsTest extends TestCase
         $this->assertEquals(0, $date['second']);
     }
 
+    public function test_parseFromFormat_without_year()
+    {
+        $date = CalendarUtils::parseFromFormat('H:i', '14:30');
+
+        $this->assertEquals(0, $date['year']);
+        $this->assertEquals(14, $date['hour']);
+        $this->assertEquals(30, $date['minute']);
+    }
+
     public function testCreateDateTimeFormFormat()
     {
         $jdate = '1394/11/25 15:00:00';
