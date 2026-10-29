@@ -725,8 +725,10 @@ class CalendarUtils
                     unset($dt[$k]);
                 }
             }
-            if (!CalendarUtils::checkdate($dt['month'], $dt['day'], $dt['year'], false)) {
-                $dt['error_count'] = 1;
+            if (isset($dt['year'], $dt['month'], $dt['day'])) {
+                if (!CalendarUtils::checkdate($dt['month'], $dt['day'], $dt['year'], false)) {
+                    $dt['error_count'] = 1;
+                }
             }
         } else {
             $dt['error_count'] = 1;
@@ -740,7 +742,7 @@ class CalendarUtils
         $dt['zone'] = 0;
         $dt['is_dst'] = '';
 
-        if (strlen($dt['year']) == 2) {
+        if (isset($dt['year']) && strlen($dt['year']) == 2) {
             $now = Jalalian::forge('now');
             $x = $now->format('Y') - $now->format('y');
             $dt['year'] += $x;
